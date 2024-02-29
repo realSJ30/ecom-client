@@ -1,11 +1,11 @@
 "use client";
+import { useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
+import axios from "axios";
 import Button from "@/components/ui/button";
 import Currency from "@/components/ui/currency";
 import { toast } from "@/components/ui/use-toast";
 import useCart from "@/hooks/use-cart";
-import axios from "axios";
-import { useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
 
 const Summary = () => {
   const searchParams = useSearchParams();
