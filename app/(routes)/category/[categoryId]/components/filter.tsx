@@ -56,7 +56,7 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
               className={cn(
                 "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition",
                 active
-                  ? "border-primary/60 bg-gradient-to-br from-[hsl(258_90%_66%)]/20 to-[hsl(190_95%_55%)]/20 text-foreground"
+                  ? "border-primary/60 bg-primary/15 text-foreground"
                   : "border-border bg-surface-2 text-muted-foreground hover:border-primary/40 hover:text-foreground"
               )}
             >

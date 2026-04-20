@@ -48,7 +48,7 @@ const NavbarActions: React.FC<NavbarActionsProps> = ({ className }) => {
         aria-label="View cart"
         className="group inline-flex items-center gap-2 rounded-full border border-border bg-surface-2/80 pl-2 pr-4 py-1.5 text-sm font-medium text-foreground backdrop-blur transition hover:border-primary/50 hover:bg-surface-3"
       >
-        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-[hsl(258_90%_66%)] to-[hsl(190_95%_55%)] text-white">
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white">
           <ShoppingBag className="h-3.5 w-3.5" />
         </span>
         <span>Cart</span>

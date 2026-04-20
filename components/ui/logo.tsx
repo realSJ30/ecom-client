@@ -63,14 +63,14 @@ const Logo: React.FC<LogoProps> = ({
           strokeWidth="1.5"
         />
         <path
-          d="M12 28V12L28 28V12"
+          d="M13 12V28M26.5 12L16.5 20L26.5 28"
           stroke={`url(#${gradId}-stroke)`}
           strokeWidth="2.75"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-        <circle cx="12" cy="12" r="1.75" fill="hsl(258 90% 66%)" />
-        <circle cx="28" cy="28" r="1.75" fill="hsl(190 95% 55%)" />
+        <circle cx="13" cy="12" r="1.75" fill="hsl(258 90% 66%)" />
+        <circle cx="26.5" cy="28" r="1.75" fill="hsl(190 95% 55%)" />
       </svg>
       {showWordmark && (
         <span className="font-display text-lg font-semibold tracking-tight text-foreground">

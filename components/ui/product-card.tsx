@@ -67,7 +67,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
               aria-label="Add to cart"
               onClick={onAddToCart}
               icon={<ShoppingCart className="h-4 w-4" />}
-              className="h-9 w-9 border-transparent bg-gradient-to-br from-[hsl(258_90%_66%)] to-[hsl(190_95%_55%)] text-white hover:brightness-110"
+              className="h-9 w-9 border-transparent bg-primary text-white hover:bg-primary/90"
             />
           </div>
         </div>

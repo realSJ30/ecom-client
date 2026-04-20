@@ -57,7 +57,7 @@ const Billboard: React.FC<BillboardProps> = ({
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href={ctaHref}
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-[hsl(258_90%_66%)] via-[hsl(280_85%_62%)] to-[hsl(190_95%_55%)] px-6 py-3 text-sm font-medium text-white shadow-[0_10px_30px_-10px_hsl(258_90%_66%/0.55)] transition hover:-translate-y-px hover:brightness-110"
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-medium text-white shadow-[0_10px_30px_-10px_hsl(258_90%_66%/0.45)] transition hover:-translate-y-px hover:bg-primary/90"
             >
               {ctaLabel}
               <ArrowUpRight className="h-4 w-4" />
