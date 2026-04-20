@@ -1,45 +1,77 @@
+"use client";
 import Currency from "@/components/ui/currency";
 import IconButton from "@/components/ui/icon-button";
 import useCart from "@/hooks/use-cart";
 import { Product } from "@/types";
 import { X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 interface CartItemProps {
   data: Product;
 }
+
 const CartItem: React.FC<CartItemProps> = ({ data }) => {
   const cart = useCart();
 
   const onRemove = () => {
     cart.removeItem(data.id);
   };
+
   return (
-    <li className="flex py-6 border-b">
-      <div className="relative h-24 w-24 rounded-md overflow-hidden sm:h-48 sm:w-48">
+    <li className="flex gap-4 p-4 sm:gap-6 sm:p-6">
+      <Link
+        href={`/product/${data.id}`}
+        className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl border border-border bg-surface-2 sm:h-32 sm:w-32"
+      >
         <Image
           fill
-          src={data.images[0].url}
-          alt=""
+          sizes="128px"
+          src={data.images[0]?.url}
+          alt={data.name}
           className="object-cover object-center"
         />
-      </div>
-      <div className="relative ml-4 flex flex-1 flex-col justify-between sm:ml-6">
-        <div className="absolute z-10 right-0 top-0">
-          <IconButton onClick={onRemove} icon={<X size={15} />} />
+      </Link>
+      <div className="relative flex flex-1 flex-col justify-between gap-2">
+        <div className="absolute right-0 top-0">
+          <IconButton
+            aria-label="Remove item"
+            onClick={onRemove}
+            icon={<X className="h-3.5 w-3.5" />}
+            className="h-8 w-8"
+          />
         </div>
-        <div className="relative items-center pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-          <div className="flex justify-between">
-            <p className="text-lg font-semibold text-black">{data.name}</p>
+        <div className="pr-10">
+          <Link
+            href={`/product/${data.id}`}
+            className="font-display text-base font-medium text-foreground transition hover:text-[hsl(280_85%_75%)] sm:text-lg"
+          >
+            {data.name}
+          </Link>
+          <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+            {data.color?.name && (
+              <span className="inline-flex items-center gap-1.5">
+                <span
+                  className="h-2.5 w-2.5 rounded-full border border-white/10"
+                  style={{ backgroundColor: data.color.value }}
+                />
+                {data.color.name}
+              </span>
+            )}
+            {data.size?.name && (
+              <span className="rounded-full border border-border bg-surface-2 px-2 py-0.5">
+                Size {data.size.name}
+              </span>
+            )}
           </div>
-          <div className="mt-1 flex text-sm">
-            <p className="text-gray-500">{data.color.name}</p>
-            <p className="text-gray-500 ml-4 border-l border-gray-200 pl-4">
-              {data.size.name}
-            </p>
-          </div>
-          <Currency value={data.price} />
+        </div>
+        <div className="flex items-end justify-between">
+          <span className="text-xs text-muted-foreground">Qty 1</span>
+          <Currency
+            value={data.price}
+            className="text-base font-semibold text-foreground"
+          />
         </div>
       </div>
     </li>

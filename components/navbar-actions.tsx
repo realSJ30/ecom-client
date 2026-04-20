@@ -1,11 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Button from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { Search, ShoppingBag, User } from "lucide-react";
 import useCart from "@/hooks/use-cart";
 import { useRouter } from "next/navigation";
+import IconButton from "@/components/ui/icon-button";
+import { cn } from "@/lib/utils";
 
-const NavbarActions = () => {
+interface NavbarActionsProps {
+  className?: string;
+}
+
+const NavbarActions: React.FC<NavbarActionsProps> = ({ className }) => {
   const router = useRouter();
   const cart = useCart();
 
@@ -16,21 +21,41 @@ const NavbarActions = () => {
   }, []);
 
   if (!isMounted) {
-    return null;
+    return (
+      <div className={cn("flex items-center gap-2", className)}>
+        <div className="h-10 w-10 rounded-full bg-surface-2" />
+        <div className="h-10 w-10 rounded-full bg-surface-2" />
+        <div className="h-10 w-24 rounded-full bg-surface-2" />
+      </div>
+    );
   }
 
   return (
-    <div className="ml-auto flex items-center gap-x-4">
-      <Button className="flex items-center rounded-full bg-black px-4 py-2">
-        <ShoppingBag
-          size={20}
-          color="white"
-          onClick={() => router.push("/cart")}
-        />
-        <span className="ml-2 text-sm font-medium text-white">
+    <div className={cn("flex items-center gap-2", className)}>
+      <IconButton
+        aria-label="Search"
+        icon={<Search className="h-4 w-4" />}
+        className="hidden sm:inline-flex"
+      />
+      <IconButton
+        aria-label="Account"
+        icon={<User className="h-4 w-4" />}
+        className="hidden sm:inline-flex"
+      />
+      <button
+        type="button"
+        onClick={() => router.push("/cart")}
+        aria-label="View cart"
+        className="group inline-flex items-center gap-2 rounded-full border border-border bg-surface-2/80 pl-2 pr-4 py-1.5 text-sm font-medium text-foreground backdrop-blur transition hover:border-primary/50 hover:bg-surface-3"
+      >
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-[hsl(258_90%_66%)] to-[hsl(190_95%_55%)] text-white">
+          <ShoppingBag className="h-3.5 w-3.5" />
+        </span>
+        <span>Cart</span>
+        <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-white/10 px-1.5 text-xs text-foreground">
           {cart.items.length}
         </span>
-      </Button>
+      </button>
     </div>
   );
 };

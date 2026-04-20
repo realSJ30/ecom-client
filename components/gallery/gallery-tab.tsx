@@ -8,33 +8,32 @@ interface GalleryTabProps {
   image: Image;
 }
 
-const GalleryTab: React.FC<GalleryTabProps> = ({
-  image
-}) => {
-  return ( 
-    <Tab
-      className="relative flex aspect-square cursor-pointer items-center justify-center rounded-md bg-white"
-    >
+const GalleryTab: React.FC<GalleryTabProps> = ({ image }) => {
+  return (
+    <Tab className="relative flex aspect-square cursor-pointer items-center justify-center rounded-xl focus:outline-none">
       {({ selected }) => (
-        <div>
-          <span className="absolute h-full w-full aspect-square inset-0 overflow-hidden rounded-md">
-            <NextImage 
-              fill 
-              src={image.url} 
-              alt="" 
-              className="object-cover object-center" 
+        <div className="relative h-full w-full">
+          <span className="absolute inset-0 overflow-hidden rounded-xl border border-border">
+            <NextImage
+              fill
+              src={image.url}
+              alt=""
+              sizes="140px"
+              className="object-cover object-center"
             />
           </span>
           <span
             className={cn(
-              'absolute inset-0 rounded-md ring-2 ring-offset-2',
-              selected ? 'ring-black' : 'ring-transparent',
+              "pointer-events-none absolute inset-0 rounded-xl ring-2 transition",
+              selected
+                ? "ring-[hsl(258_90%_66%)] ring-offset-2 ring-offset-background"
+                : "ring-transparent"
             )}
           />
         </div>
       )}
     </Tab>
   );
-}
- 
+};
+
 export default GalleryTab;

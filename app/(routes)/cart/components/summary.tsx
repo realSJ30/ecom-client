@@ -2,6 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 import axios from "axios";
+import { Lock, Truck } from "lucide-react";
 import Button from "@/components/ui/button";
 import Currency from "@/components/ui/currency";
 import { toast } from "@/components/ui/use-toast";
@@ -12,9 +13,13 @@ const Summary = () => {
   const items = useCart((state) => state.items);
   const removeAll = useCart((state) => state.removeAll);
 
-  const totalPrice = items.reduce((total, item) => {
-    return total + Number(item.price);
-  }, 0);
+  const subtotal = items.reduce(
+    (total, item) => total + Number(item.price),
+    0
+  );
+  const shippingThreshold = 80;
+  const shipping = subtotal > 0 && subtotal < shippingThreshold ? 8 : 0;
+  const total = subtotal + shipping;
 
   const onCheckout = async () => {
     const response = await axios.post(
@@ -29,9 +34,7 @@ const Summary = () => {
 
   useEffect(() => {
     if (searchParams.get("success")) {
-      toast({
-        title: "Payment completed.",
-      });
+      toast({ title: "Payment completed." });
       removeAll();
     }
 
@@ -39,24 +42,75 @@ const Summary = () => {
       toast({ title: "Something went wrong." });
     }
   }, [searchParams, removeAll]);
+
   return (
-    <div className="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
-      <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
-      <div className="mt-6 space-y-4">
-        <div className="flex items-center justify-between border-t border-gray-200 pt-4">
-          <div className="text-base font-medium text-gray-900">Order total</div>
-          <Currency value={totalPrice} />
-        </div>
+    <div className="sticky top-28 rounded-3xl border border-border bg-surface-1 p-6 sm:p-8">
+      <h2 className="font-display text-lg font-semibold text-foreground">
+        Order summary
+      </h2>
+      <div className="mt-6 space-y-3 text-sm">
+        <Row label="Subtotal">
+          <Currency value={subtotal} className="text-sm text-foreground" />
+        </Row>
+        <Row label="Shipping">
+          {shipping === 0 ? (
+            <span className="text-sm font-medium text-[hsl(190_95%_70%)]">
+              Free
+            </span>
+          ) : (
+            <Currency value={shipping} className="text-sm text-foreground" />
+          )}
+        </Row>
+        <Row label="Taxes">
+          <span className="text-sm text-muted-foreground">Calculated at checkout</span>
+        </Row>
       </div>
+
+      <div className="my-6 h-px bg-border" />
+
+      <div className="flex items-baseline justify-between">
+        <span className="font-display text-base font-semibold text-foreground">
+          Total
+        </span>
+        <Currency
+          value={total}
+          className="font-display text-2xl font-semibold text-foreground"
+        />
+      </div>
+
+      {subtotal > 0 && subtotal < shippingThreshold && (
+        <p className="mt-4 rounded-xl border border-border bg-surface-2 p-3 text-xs text-muted-foreground">
+          Add <Currency value={shippingThreshold - subtotal} className="inline text-xs text-foreground" /> more
+          to unlock free shipping.
+        </p>
+      )}
+
       <Button
         onClick={onCheckout}
         disabled={items.length === 0}
-        className="w-full mt-6"
+        size="lg"
+        className="mt-6 w-full"
       >
-        Checkout
+        <Lock className="h-4 w-4" />
+        Secure checkout
       </Button>
+
+      <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+        <Truck className="h-3.5 w-3.5" />
+        <span>Ships in 1–2 business days. Free returns within 30 days.</span>
+      </div>
     </div>
   );
 };
+
+const Row: React.FC<{ label: string; children: React.ReactNode }> = ({
+  label,
+  children,
+}) => (
+  <div className="flex items-center justify-between">
+    <span className="text-muted-foreground">{label}</span>
+    {children}
+  </div>
+);
 
 export default Summary;

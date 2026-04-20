@@ -3,7 +3,6 @@ import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Size, Color } from "@/types";
 import qs from "query-string";
-import Button from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface FilterProps {
@@ -11,6 +10,7 @@ interface FilterProps {
   name: string;
   valueKey: string;
 }
+
 const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -39,24 +39,37 @@ const Filter: React.FC<FilterProps> = ({ data, name, valueKey }) => {
 
     router.push(url);
   };
+
   return (
-    <div className="mb-8">
-      <h3 className="text-lg font-semibold">{name}</h3>
-      <hr className="my-4" />
-      <div className="flex flex-wrap gap-2">
-        {data.map((filter) => (
-          <div key={filter.id} className="flex items-center">
-            <Button
-              className={cn(
-                "rounded-md text-sm text-gray-800 p-2 bg-white border border-gray-300",
-                selectedValue === filter.id && "bg-black text-white"
-              )}
+    <div>
+      <h4 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        {name}
+      </h4>
+      <div className="mt-3 flex flex-wrap gap-2">
+        {data.map((filter) => {
+          const active = selectedValue === filter.id;
+          return (
+            <button
+              type="button"
+              key={filter.id}
               onClick={() => onClick(filter.id)}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium transition",
+                active
+                  ? "border-primary/60 bg-gradient-to-br from-[hsl(258_90%_66%)]/20 to-[hsl(190_95%_55%)]/20 text-foreground"
+                  : "border-border bg-surface-2 text-muted-foreground hover:border-primary/40 hover:text-foreground"
+              )}
             >
+              {"value" in filter && /^#/.test(filter.value) && (
+                <span
+                  className="h-3 w-3 rounded-full border border-white/10"
+                  style={{ backgroundColor: filter.value }}
+                />
+              )}
               {filter.name}
-            </Button>
-          </div>
-        ))}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
