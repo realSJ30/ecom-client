@@ -4,13 +4,9 @@ import { Sparkles } from "lucide-react";
 
 import Container from "@/components/ui/container";
 import Logo from "@/components/ui/logo";
-import MainNav from "@/components/ui/main-nav";
-import getCategories from "@/actions/get-categories";
-import NavbarActions from "@/components/navbar-actions";
-import MobileMenu from "@/components/mobile-menu";
+import NavbarCategories from "@/components/navbar-categories";
 
-const Navbar = async () => {
-  const categories = await getCategories();
+const Navbar = () => {
   return (
     <header className="sticky top-0 z-40">
       <div className="relative overflow-hidden border-b border-border/60 bg-gradient-to-r from-[hsl(258_90%_10%)] via-[hsl(240_20%_6%)] to-[hsl(190_60%_10%)]">
@@ -35,12 +31,7 @@ const Navbar = async () => {
               <Logo />
             </Link>
 
-            <MainNav data={categories} className="ml-6 hidden lg:flex" />
-
-            <div className="ml-auto flex items-center gap-2">
-              <NavbarActions />
-              <MobileMenu categories={categories} />
-            </div>
+            <NavbarCategories className="ml-6 hidden lg:flex" />
           </div>
         </Container>
       </div>

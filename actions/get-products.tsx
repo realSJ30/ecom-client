@@ -1,7 +1,6 @@
 import { Product } from "@/types";
+import { fetchStoreApiJson, getStoreApiBaseUrl } from "@/lib/store-api";
 import qs from "query-string";
-
-const URL=`${process.env.NEXT_PUBLIC_API_URL}/products`;
 
 interface Query {
   categoryId?: string;
@@ -12,7 +11,7 @@ interface Query {
 
 const getProducts = async (query: Query): Promise<Product[]> => {
   const url = qs.stringifyUrl({
-    url: URL,
+    url: `${getStoreApiBaseUrl()}/products`,
     query: { 
       colorId: query.colorId,
       sizeId: query.sizeId,
@@ -21,9 +20,7 @@ const getProducts = async (query: Query): Promise<Product[]> => {
     },
   });
 
-  const res = await fetch(url);
-
-  return res.json();
+  return fetchStoreApiJson<Product[]>(url);
 };
 
 export default getProducts;

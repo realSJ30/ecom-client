@@ -1,10 +1,8 @@
 import { Billboard } from "@/types";
-
-const URL = `${process.env.NEXT_PUBLIC_API_URL}/billboards`;
+import { fetchStoreApiJson } from "@/lib/store-api";
 
 const getBillboard = async (id: string): Promise<Billboard> => {
-  const res = await fetch(`${URL}/${id}`);
-  return res.json();
+  return fetchStoreApiJson<Billboard>(`billboards/${id}`);
 };
 
 export default getBillboard;

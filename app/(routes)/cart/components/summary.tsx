@@ -1,19 +1,26 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Lock, Truck } from "lucide-react";
 import Button from "@/components/ui/button";
 import Currency from "@/components/ui/currency";
 import { toast } from "@/components/ui/use-toast";
 import useCart from "@/hooks/use-cart";
+import { buildStoreApiUrl } from "@/lib/store-api";
 
 const Summary = () => {
   const searchParams = useSearchParams();
   const items = useCart((state) => state.items);
   const removeAll = useCart((state) => state.removeAll);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const subtotal = items.reduce(
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const cartItems = isMounted ? items : [];
+  const subtotal = cartItems.reduce(
     (total, item) => total + Number(item.price),
     0
   );
@@ -22,14 +29,27 @@ const Summary = () => {
   const total = subtotal + shipping;
 
   const onCheckout = async () => {
-    const response = await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/checkout`,
-      {
-        productIds: items.map((item) => item.id),
-      }
-    );
+    try {
+      const checkoutUrl = buildStoreApiUrl("checkout");
+      const response = await axios.post(checkoutUrl, {
+        productIds: cartItems.map((item) => item.id),
+      });
 
-    window.location = response.data.url;
+      const redirectUrl = response.data?.url;
+
+      if (typeof redirectUrl !== "string" || redirectUrl.length === 0) {
+        throw new Error("Checkout response did not include a redirect URL.");
+      }
+
+      window.location.href = redirectUrl;
+    } catch (error) {
+      console.error("Checkout failed:", error);
+      toast({
+        title: "Checkout unavailable",
+        description: "Please verify the store API URL and try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   useEffect(() => {
@@ -87,7 +107,7 @@ const Summary = () => {
 
       <Button
         onClick={onCheckout}
-        disabled={items.length === 0}
+        disabled={cartItems.length === 0}
         size="lg"
         className="mt-6 w-full"
       >

@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 import Container from "@/components/ui/container";
@@ -9,6 +9,13 @@ import Summary from "./components/summary";
 
 const CartPage = () => {
   const cart = useCart();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const itemCount = isMounted ? cart.items.length : 0;
 
   return (
     <Container className="space-y-10 py-8 sm:py-10 lg:py-14">
@@ -24,15 +31,14 @@ const CartPage = () => {
             Your cart
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {cart.items.length} {cart.items.length === 1 ? "item" : "items"} in
-            your bag
+            {itemCount} {itemCount === 1 ? "item" : "items"} in your bag
           </p>
         </div>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-12 lg:items-start lg:gap-10">
         <div className="lg:col-span-7">
-          {cart.items.length === 0 ? (
+          {!isMounted || itemCount === 0 ? (
             <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-border bg-surface-1 p-10 text-center">
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-surface-2 text-muted-foreground">
                 <ShoppingBag className="h-5 w-5" />
